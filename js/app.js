@@ -18,7 +18,7 @@ const phrases = [
     "I am Groot",
     "That is Americas Ass",
     "Whatever it takes",
-    "Strategic Homeland Intervention Enforcement and Logistics Division"
+    "Why is Gamora"
 ];
 
 const getRandomPhraseAsArray = (array) => {
@@ -32,24 +32,35 @@ const getRandomPhraseAsArray = (array) => {
 
 const phraseArray = getRandomPhraseAsArray(phrases);
 
-const addPhraseToDisplay = function(characterArray) {
+const addPhraseToDisplay = (characterArray) => {
     let ul = document.getElementById("phrase").firstElementChild;
     for (i = 0; i < characterArray.length; i++) {
         let li = document.createElement("LI");
         li.innerText = (characterArray[i]);
         console.log(li.innerText);
-        
         if (li.innerText != 0) {
             li.classList.add('letter')
         }
-        
         ul.appendChild(li);
-        
-        
     }
     
 }
 
-/* const test = ["t","h","i","s","","i","s","","a","","c","h","a","r","a","c","t","e","r","","a","r","r","a","y"]; */
-
 addPhraseToDisplay(phraseArray)
+
+
+const checkLetter =  (button) => {
+    const letters = document.getElementsByClassName("letter");
+    const buttonText = button.innnerText;
+    for (i= 0; i < letters.length; i++) {
+        if (buttonText === letters[i]) {
+            let matchingLetters = []
+            console.log("match");
+            letters[i].classList.add('show')
+            matchingLetters.push(buttonText)
+            return buttonText
+        } else {
+            return null
+        }
+    }
+}
