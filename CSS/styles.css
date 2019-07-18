@@ -154,6 +154,7 @@ button {
 
 .start a {
   color: var(--color-win);
+  cursor: pointer;
 }
 
 .win {
@@ -162,6 +163,7 @@ button {
 
 .win a {
   color: var(--color-win);
+  cursor: pointer;
 }
 
 .lose {
@@ -170,4 +172,5 @@ button {
 
 .lose a {
   color: var(--color-lose);
+  cursor: pointer;
 }
