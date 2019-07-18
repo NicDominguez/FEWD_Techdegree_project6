@@ -6,8 +6,11 @@ const keyboard = document.getElementById('qwerty');
 const phrase = document.getElementById('phrase');
 const startGameButton = document.getElementsByClassName('btn__reset');
 let matchingLetters = []
+let chosenKeys = []
 let missed = 0;
 
+
+//Phrase options for the player to guess
 const phrases = [
     "Avengers Assemble",
     "Even Dead I am the Hero",
@@ -68,35 +71,25 @@ const checkLetter = (button) => {
 
 //checks if player has won the game
 const checkWin = () => {
-    console.log("checkWin is running")
     const letters = document.getElementsByClassName("letter");
     const lettersShown = document.getElementsByClassName("show");
     const overlay = document.getElementById("overlay");
     const title = overlay.firstElementChild;
-    console.log(overlay)
+    const resetButton = overlay.lastElementChild;
     if (letters.length === lettersShown.length) {
         overlay.classList.remove("start")
         overlay.classList.add("win")
         overlay.style.visibility = "visible";
         title.innerText= "You Win!"
+        resetButton.innerText = "Play Again?"
     } else if (missed >= 5) {
         overlay.classList.remove("start")
         overlay.classList.add("lose")
         overlay.style.visibility = "visible";
         title.innerText = "Sorry, you lost =("
+        resetButton.innerText = "Play Again?"
     }
 }
-
-
-
-/////////////////
-//Code
-/////////////////
-
-//gets phrase array
-const phraseArray = getRandomPhraseAsArray(phrases);
-//displays phrase array
-addPhraseToDisplay(phraseArray)
 
 /////////////////
 //Events
@@ -104,8 +97,34 @@ addPhraseToDisplay(phraseArray)
 
 //removes overlay when start game butten clicked
 startGameButton[0].addEventListener("click", function (e) {
+    console.log("reset fucntion running")
+    //hides overlay
     e.target.parentNode.style.visibility = "hidden";
-});
+    //resets lives
+    missed = 0
+    const tries = document.getElementsByClassName("tries")
+    for (i = 0; i < tries.length; i++)
+        if (tries[i].firstElementChild.getAttribute("src") === "images/lostHeart.png") {
+            tries[i].firstElementChild.setAttribute("src", "images/liveHeart.png")
+        }
+    //removes chosen class from keyboard letters
+    keys = document.getElementsByTagName("button")
+    for (i = 0; i < keys.length; i++) {
+        keys[i].classList.remove("chosen")
+        keys[i].removeAttribute("disabled")
+    }
+
+
+
+    //Remove old phrase IN DEVELOPMNT
+    let ul= phrase.firstElementChild
+    ul.removeChild
+
+    //chooses and displays new phrase IN DEVELOPMENT
+    phraseArray = getRandomPhraseAsArray(phrases)
+    console.log(phraseArray)
+    addPhraseToDisplay(phraseArray);
+})
 
 //runs checkLetter function when keyboard button is clicked and adds classes to button
 keyboard.addEventListener("click", (e) => {
@@ -130,7 +149,6 @@ keyboard.addEventListener("click", (e) => {
     //checks if player won or lost after letter selection
     checkWin();
 })
-
 
 
 
