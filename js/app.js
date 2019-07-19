@@ -1,11 +1,12 @@
 /////////////////
 //Variables
 /////////////////
-
-const keyboard = document.getElementById('qwerty');
-const phrase = document.getElementById('phrase');
-let startGameButton = document.getElementsByClassName('btn__reset')[0];
 const overlay = document.getElementById("overlay");
+const title = overlay.firstElementChild;
+const phrase = document.getElementById('phrase');
+const ul = document.getElementById("phrase").firstElementChild;
+const keyboard = document.getElementById('qwerty');
+let startGameButton = document.getElementsByClassName('btn__reset')[0];
 let matchingLetters = []
 let chosenKeys = []
 let missed = 0;
@@ -26,7 +27,22 @@ const phrases = [
 ];
 
 /////////////////
-//Functions
+//Helper Functions
+/////////////////
+
+const setOverlay = (winOrLose, titleInnerText) => {
+    overlay.classList.remove("start")
+    overlay.classList.add(winOrLose)
+    overlay.style.visibility = "visible"
+    title.innerText = titleInnerText
+    startGameButton.innerText = "Shall we play again?"
+}
+
+
+
+
+/////////////////
+//Feature Functions
 /////////////////
 
 //chooses item from phrases array and converst to character array
@@ -40,7 +56,6 @@ const getRandomPhraseAsArray = (array) => {
 
 //displays chosesn character array
 const addPhraseToDisplay = (characterArray) => {
-    let ul = document.getElementById("phrase").firstElementChild;
     for (i = 0; i < characterArray.length; i++) {
         let li = document.createElement("LI");
         li.innerText = characterArray[i];
@@ -72,51 +87,37 @@ const checkLetter = (button) => {
 
 //checks if player has won the game
 const checkWin = () => {
-    const letters = document.getElementsByClassName("letter");
-    const lettersShown = document.getElementsByClassName("show");
-    const title = overlay.firstElementChild;
-    
+    let letters = document.getElementsByClassName("letter");
+    let lettersShown = document.getElementsByClassName("show");
     if (letters.length === lettersShown.length) {
-        overlay.classList.remove("start")
-        overlay.classList.add("win")
-        overlay.style.visibility = "visible"
-        title.innerText= "You Win!"
-        startGameButton.innerText = "Shall we play again?"
-
+        setOverlay ("win", "You Win!")
     } else if (missed >= 5) {
-        overlay.classList.remove("start")
-        overlay.classList.add("lose")
-        overlay.style.visibility = "visible"
-        title.innerText = "Sorry, you lost =("
-        startGameButton.innerText = "Shall we play again?"
+        setOverlay ("lose", "Sorry, you lost =(")
     }
 }
 
 const resetGame = () => {
-    console.log("reset function running")
     phraseArray = getRandomPhraseAsArray(phrases)
     addPhraseToDisplay(phraseArray);
     if (startGameButton.innerHTML === "Shall we play again?") {
-        console.log("if statement running")
         //resets lives
         missed = 0
-        const tries = document.getElementsByClassName("tries")
+        let tries = document.getElementsByClassName("tries")
+        let keys = document.getElementsByTagName("button")
+        let childLI = ul.lastElementChild;
         for (i = 0; i < tries.length; i++)
             if (tries[i].firstElementChild.getAttribute("src") === "images/lostHeart.png") {
                 tries[i].firstElementChild.setAttribute("src", "images/liveHeart.png")
             }
         //removes chosen class from keyboard letters
-        keys = document.getElementsByTagName("button")
         for (i = 0; i < keys.length; i++) {
             keys[i].classList.remove("chosen")
             keys[i].removeAttribute("disabled")
         }
         //Remove old phrase
-        let ul = phrase.firstElementChild
-        let child = ul.lastElementChild;
-        while (child) {
-            ul.removeChild(child);
-            child = ul.lastElementChild;
+        while (childLI) {
+            ul.removeChild(childLI);
+            childLI = ul.lastElementChild;
         }
 
         //chooses and displays new phrase
@@ -144,15 +145,13 @@ startGameButton.addEventListener("click", (e) => {
 //runs checkLetter function when keyboard button is clicked and adds classes to button
 keyboard.addEventListener("click", (e) => {
     if (e.target.tagName === 'BUTTON') {
-        const button = e.target;
+        let button = e.target;
+        let letterFound = checkLetter(button)
         button.classList.add("chosen");
         button.setAttribute("disabled", "");
-
-        let letterFound = checkLetter(button)
-
         //changes Heart picture on next scorebaoard li to lost Heart pic 
         if (letterFound === null) {
-            const tries = document.getElementsByClassName("tries")
+            let tries = document.getElementsByClassName("tries")
             for (i = 0; i < tries.length; i++)
                 if (tries[i].firstElementChild.getAttribute("src") === "images/liveHeart.png") {
                     tries[i].firstElementChild.setAttribute("src", "images/lostHeart.png")
