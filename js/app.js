@@ -38,9 +38,6 @@ const setOverlay = (winOrLose, titleInnerText) => {
     startGameButton.innerText = "Shall we play again?"
 }
 
-
-
-
 /////////////////
 //Feature Functions
 /////////////////
@@ -96,6 +93,7 @@ const checkWin = () => {
     }
 }
 
+//resets game features after play again button clicked
 const resetGame = () => {
     phraseArray = getRandomPhraseAsArray(phrases)
     addPhraseToDisplay(phraseArray);
@@ -124,7 +122,7 @@ const resetGame = () => {
         phraseArray = getRandomPhraseAsArray(phrases)
         addPhraseToDisplay(phraseArray);
 
-        //remove los and win class from overlay
+        //remove lose and win class from overlay
         overlay.classList.remove("lose")
         overlay.classList.remove("win")
     }
